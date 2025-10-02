@@ -56,8 +56,7 @@ ffi.cdef [[
 ]]
 
 
-local lib = ffi.load "argon2"
-
+local lib = ffi.os == 'Windows' and ffi.load "argon2" or ffi.load "argon2.so.1"
 
 local ARGON2_OK              = 0
 local ARGON2_VERIFY_MISMATCH = -35
