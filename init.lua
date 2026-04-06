@@ -55,8 +55,31 @@ ffi.cdef [[
                       argon2_type type);
 ]]
 
+local cwd = type(module) == "table" and module.dir or "."
+local search_path = {
+    Windows = {
+        cwd .. "/Windows-x64/argon2.dll",
+        cwd .. "/Windows-x86_64/argon2.dll",
+        "argon2",
+    },
+    Linux = {
+        cwd .. "/Linux-x64/libaron2.so.1",
+        cwd .. "/Linux-x86_64/libargon2.so.1",
+        "argon2.so.1",
+    },
+}
 
-local lib = ffi.os == 'Windows' and ffi.load "argon2" or ffi.load "argon2.so.1"
+local lib
+for _, path in ipairs(search_path[ffi.os] or search_path.Linux) do
+    local success
+    success, lib = pcall(ffi.load, path)
+    if success then
+        break
+    end
+end
+if not lib then
+    return error("shared library argon2 was not found")
+end
 
 local ARGON2_OK              = 0
 local ARGON2_VERIFY_MISMATCH = -35

@@ -1,6 +1,6 @@
 return {
   name = "Bilal2453/argon2",
-  version = "3.0.1",
+  version = "3.0.1-1",
   description = "Argon2 FFI bindings.",
   tags = { "argon2" },
   license = "MIT",
@@ -9,6 +9,7 @@ return {
   dependencies = {},
   files = {
     "$OS-$ARCH/*",
+    "$OS-$ARCH_64/*", -- lit bug workaround
     "**.lua",
     "!example",
     "!test*",
